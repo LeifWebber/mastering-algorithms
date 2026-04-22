@@ -62,15 +62,13 @@
 // @lc code=start
 // @ts-ignore
 function findPeakElement(nums: number[]): number {
-  const length = nums.length;
-  let left = -1,
-    right = length - 1,
-    mid: number;
+  let left = -1, right = nums.length, mid: number;
   while (left + 1 < right) {
-    mid = Math.floor((left + right) / 2);
-    if (nums[mid] > nums[mid + 1]) right = mid;
-    else left = mid;
+    mid = Math.floor((left + right) / 2)
+    if (nums[mid] < nums[mid + 1]) left = mid
+    else right = mid
   }
-  return right;
+  return right
 }
 // @lc code=end
+console.log(findPeakElement([1,2,1,3,5,6,4]))

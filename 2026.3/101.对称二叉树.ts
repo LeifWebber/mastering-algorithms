@@ -53,7 +53,7 @@
  * 进阶：你可以运用递归和迭代两种方法解决这个问题吗？
  *
  */
- // @ts-ignore
+// @ts-ignore
 class TreeNode {
   val: number;
   left: TreeNode | null;
@@ -68,12 +68,11 @@ class TreeNode {
 // @ts-ignore
 function isSymmetric(root: TreeNode | null): boolean {
   if (!root) return true;
-  // 传两棵树进去，第一棵的左节点 = 第二棵右节点，第一颗右节点等于第二棵左节点
-  function dfs(tree1: TreeNode | null, tree2: TreeNode | null): boolean {
+  const dfs = (tree1: TreeNode | null, tree2: TreeNode | null): boolean => {
     if (!tree1 || !tree2) return tree1 === tree2;
     if (tree1.val !== tree2.val) return false;
     return dfs(tree1.left, tree2.right) && dfs(tree1.right, tree2.left);
-  }
+  };
   return dfs(root.left, root.right);
 }
 // @lc code=end

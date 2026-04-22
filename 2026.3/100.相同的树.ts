@@ -58,7 +58,7 @@
  *
  *
  */
- // @ts-ignore
+// @ts-ignore
 class TreeNode {
   val: number;
   left: TreeNode | null;
@@ -70,7 +70,7 @@ class TreeNode {
   }
 }
 // @lc code=start
- // @ts-ignore
+// @ts-ignore
 function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
   if (!p && !q) return true;
   if (!p || !q) return false;

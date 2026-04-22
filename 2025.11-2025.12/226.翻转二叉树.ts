@@ -60,6 +60,7 @@
  *
  *
  */
+ // @ts-ignore
 class TreeNode {
   val: number;
   left: TreeNode | null;

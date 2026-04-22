@@ -59,6 +59,7 @@
  *
  *
  */
+// @ts-ignore
 class TreeNode {
   val: number;
   left: TreeNode | null;
@@ -70,9 +71,10 @@ class TreeNode {
   }
 }
 // @lc code=start
+// @ts-ignore
 function constructFromPrePost(
   preorder: number[],
-  postorder: number[]
+  postorder: number[],
 ): TreeNode | null {
   const map = new Map();
   const length = postorder.length;

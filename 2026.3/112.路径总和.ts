@@ -65,7 +65,7 @@
  *
  *
  */
- // @ts-ignore
+// @ts-ignore
 class TreeNode {
   val: number;
   left: TreeNode | null;
@@ -79,13 +79,14 @@ class TreeNode {
 // @lc code=start
 // @ts-ignore
 function hasPathSum(root: TreeNode | null, targetSum: number): boolean {
-  if (!root) return false;
-  targetSum -= root.val;
-  if (!root.left && !root.right) {
-    return targetSum === 0
-  } else
-    return (
-      hasPathSum(root.left, targetSum) || hasPathSum(root.right, targetSum)
-    );
+  const dfs = (root: TreeNode | null, sum: number): boolean => {
+    if (!root) return false;
+    if (!root.left && !root.right) {
+      if (root.val + sum === targetSum) return true;
+      else return false;
+    }
+    return dfs(root.left, root.val + sum) || dfs(root.right, root.val + sum);
+  };
+  return dfs(root, 0);
 }
 // @lc code=end

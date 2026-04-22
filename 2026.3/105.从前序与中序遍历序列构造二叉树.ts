@@ -69,25 +69,32 @@ class TreeNode {
 // @lc code=start
 // @ts-ignore
 function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
-  const indexMap = new Map<number, number>();
-  for (let i = 0; i < inorder.length; i++) indexMap.set(inorder[i], i);
-
-  let preIndex = 0;
-
-  function dfs(left: number, right: number) {
+  // 树为空的情况
+  if (preorder.length === 0) return null;
+  // 通过 inorder 序列建立以节点值为 key 的 Map
+  const inorderMap = new Map<number, number>(
+    inorder.map((value, index) => [value, index]),
+  );
+  let preIndex: number = 0;
+  /**
+   * 根据前序遍历不断在中序遍历序列中找到根结点，来分割左右部分，再把左右部分接到自己身上
+   * 无论这个“部分”是一棵树，还是一个叶子结点
+   * @param left 树在中序遍历序列里的左边界
+   * @param right 树在中序遍历序列里的右边界
+   * @returns 构建好的二叉树
+   */
+  const buildTreeUnit = (left: number, right: number): TreeNode | null => {
+    // 这个条件比较重要。如果 left === right 的时候，其实就是叶子结点了。再往后，就是空区间
     if (left > right) return null;
-
     const rootVal = preorder[preIndex++];
-    const root = new TreeNode(rootVal);
-
-    const mid = indexMap.get(rootVal)!;
-
-    root.left = dfs(left, mid - 1);
-    root.right = dfs(mid + 1, right);
-
-    return root;
-  }
-  return dfs(0, inorder.length - 1);
+    const mid = inorderMap.get(rootVal)!;
+    return new TreeNode(
+      rootVal,
+      buildTreeUnit(left, mid - 1),
+      buildTreeUnit(mid + 1, right),
+    );
+  };
+  return buildTreeUnit(0, inorder.length - 1);
 }
 // @lc code=end
 buildTree([3, 9, 20, 15, 7], [9, 3, 15, 20, 7]);

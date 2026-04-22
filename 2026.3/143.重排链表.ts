@@ -62,41 +62,45 @@
  *
  *
  */
-import ListNode from "./25.k-个一组翻转链表";
+import ListNode from "../2025.11-2025.12/25.k-个一组翻转链表";
 
 // @lc code=start
-function midNode(head: ListNode) {
-  let fast: ListNode | null = head,
-    slow = head;
+function reversList(head: ListNode): ListNode {
+  let currentNode: ListNode | null = head,
+    prevNode: ListNode | null = null;
+  while (currentNode) {
+    const nextNode: ListNode | null = currentNode.next;
+    currentNode.next = prevNode;
+    prevNode = currentNode;
+    currentNode = nextNode;
+  }
+  return prevNode!;
+}
+function reorderList(head: ListNode | null): void {
+  if (head === null) return;
+  let dummyNode = new ListNode(0, head);
+  // 先找找中间节点
+  let slow: ListNode = head,
+    fast: ListNode | null = head;
   while (fast && fast.next) {
     slow = slow.next!;
     fast = fast.next.next;
   }
-  return slow;
-}
-function reverseList(head: ListNode) {
-  let preNode: ListNode | null = null,
-    currentNode: ListNode | null = head;
-  while (currentNode) {
-    const nextNode: ListNode | null = currentNode.next;
-    currentNode.next = preNode;
-    preNode = currentNode;
-    currentNode = nextNode;
-  }
-  return preNode;
-}
-function reorderList(head: ListNode | null): void {
-  if (head !== null) {
-    const mid = midNode(head);
-    let head2 = reverseList(mid);
-    while (head2?.next) {
-      const nextHead: ListNode | null = head!.next;
-      const nextHead2 = head2.next;
-      head!.next = head2;
-      head2.next = nextHead;
-      head = nextHead;
-      head2 = nextHead2;
-    }
+  // 此时 slow 已经是中间节点了，我们把其后的链表反转
+  let half = slow.next!;
+  // 关键！要断掉两部分避免 loop
+  slow.next = null;
+  let head2: ListNode | null = reversList(half);
+  while (head2) {
+    // 交替合并
+    const nextHead1: ListNode | null = head!.next;
+    const nextHead2: ListNode | null = head2.next;
+
+    head!.next = head2;
+    head2.next = nextHead1;
+
+    head = nextHead1;
+    head2 = nextHead2;
   }
 }
 // @lc code=end

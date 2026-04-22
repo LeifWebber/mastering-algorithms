@@ -61,30 +61,33 @@
  */
 
 // @lc code=start
+/**
+ * 这个函数不会校验边界情况，也就是目标值过小或者过大的情况，应该由调用方判断
+ * @param nums 运行查找的数组
+ * @param target 要找的目标值
+ * @returns 在数组中第一个 >= 目标值的坐标，也就是最小的大于等于目标值的坐标.找不到则返回 -1
+ */
+const lowestIndex = (nums: readonly number[], target: number): number => {
+  let left = -1,
+    right = nums.length,
+    mid: number;
+  // 要保证 left 和 right 之间总是还有数字
+  while (left + 1 < right) {
+    mid = Math.floor((left + right) / 2);
+    if (nums[mid] >= target) {
+      right = mid;
+    } else {
+      left = mid;
+    }
+  }
+  return right;
+};
 // @ts-ignore
 function searchRange(nums: number[], target: number): number[] {
-  // 写一个函数，这会找到最小的满足 nums[i] >= target 的坐标
-  // 对于 target 大于数组中所有元素的情况，right 会停在 length 下标
-  // 对于 target 小于数组中所有元素的情况，right 会停在 下标 0
-  function lowestIndex(nums: number[], target: number) {
-    let left = -1,
-      right = nums.length,
-      mid: number;
-    // 直到没有什么数可以继续向其收拢的时候
-    while (left + 1 < right) {
-      mid = Math.floor((left + right) / 2);
-      //   使用小于等于而不是小于，是找到**最小**的满足 nums[i] >= target 的原因。
-      //   这迫使右边界向着中间收，最后停在 target 上，所以自然找到的是最小的那个。
-      //   如果是小于号，那就是左边界向中间收，最后自然是找到最大的那个。
-      if (target <= nums[mid]) right = mid;
-      else left = mid;
-    }
-    return right;
-  }
-  const left = lowestIndex(nums, target);
-  if (left === nums.length || nums[left] !== target) return [-1, -1];
-  const right = lowestIndex(nums, target + 1) - 1;
-  return [left, right];
+  const min = lowestIndex(nums, target)
+  if (nums[min] !== target) return [-1, -1]
+  const max = lowestIndex(nums, target + 1) - 1
+  return [min, max];
 }
 // @lc code=end
 [5, 5, 7, 8, 8, 8, 8, 9, 10];

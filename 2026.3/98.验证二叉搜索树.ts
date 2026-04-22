@@ -6,6 +6,8 @@
  * Feel free to contact LeavesWebber@outlook.com
  */
 
+import ListNode from "../2025.11-2025.12/25.k-个一组翻转链表";
+
 /*
  * @lc app=leetcode.cn id=98 lang=typescript
  *
@@ -58,7 +60,6 @@
  *
  *
  */
- // @ts-ignore
 class TreeNode {
   val: number;
   left: TreeNode | null;
@@ -70,33 +71,46 @@ class TreeNode {
   }
 }
 // @lc code=start
-// 中序遍历的做法，利用递增序列的性质
-// @ts-ignore
+// 使用中序遍历形成的惰性序列，这理论上不会遍历全部的树，有剪枝，但实测开销更大...
 function isValidBST(root: TreeNode | null): boolean {
-  let prev = -Infinity;
-  function inOrder(node: TreeNode | null) {
-    if (!node) return true;
-    if (!inOrder(node.left)) return false;
-    if (node.val <= prev) return false;
-    prev = node.val;
-    if (!inOrder(node.right)) return false;
-    return true;
+  function* inOrder(root: TreeNode | null): Generator<number> {
+    if (!root) return;
+    yield* inOrder(root.left);
+    yield root.val;
+    yield* inOrder(root.right);
   }
-  return inOrder(root);
+  let prev: number = -Infinity;
+  for (const number of inOrder(root)) {
+    if (number <= prev) return false;
+    prev = number;
+  }
+  return true;
 }
 // @lc code=end
+// 中序遍历的做法，利用递增序列的性质
+// function isValidBST(root: TreeNode | null): boolean {
+//   let prev = -Infinity;
+//   function inOrder(node: TreeNode | null) {
+//     if (!node) return true;
+//     if (!inOrder(node.left)) return false;
+//     if (node.val <= prev) return false;
+//     prev = node.val;
+//     if (!inOrder(node.right)) return false;
+//     return true;
+//   }
+//   return inOrder(root);
+// }
 // 前序遍历做法，把范围往下传，比较经典
-// @ts-ignore
-function isValidBST(root: TreeNode | null): boolean {
-  function isValid(node: TreeNode | null, min: number, max: number) {
-    if (!node) return true;
-    if (node.val >= max || node.val <= min) return false;
-    if (
-      !isValid(node.left, min, node.val) ||
-      !isValid(node.right, node.val, max)
-    )
-      return false;
-    return true;
-  }
-  return isValid(root, -Infinity, Infinity);
-}
+// function isValidBST(root: TreeNode | null): boolean {
+//   function isValid(node: TreeNode | null, min: number, max: number) {
+//     if (!node) return true;
+//     if (node.val >= max || node.val <= min) return false;
+//     if (
+//       !isValid(node.left, min, node.val) ||
+//       !isValid(node.right, node.val, max)
+//     )
+//       return false;
+//     return true;
+//   }
+//   return isValid(root, -Infinity, Infinity);
+// }

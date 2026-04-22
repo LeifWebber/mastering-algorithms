@@ -56,6 +56,7 @@
  *
  *
  */
+// @ts-ignore
 class TreeNode {
   val: number;
   left: TreeNode | null;
@@ -69,10 +70,13 @@ class TreeNode {
 // @lc code=start
 function isBalanced(root: TreeNode | null): boolean {
   // 左右子树的高度差是否 <= 1，这个模式普适
+  // @ts-ignore
   function dfs(node: TreeNode | null) {
     if (!node) return 0;
+    // @ts-ignore
     const maxLeft = dfs(node.left);
     if (maxLeft === -1) return -1;
+    // @ts-ignore
     const maxRight = dfs(node.right);
     if (maxRight === -1) return -1;
     if (Math.abs(maxLeft - maxRight) > 1) return -1;

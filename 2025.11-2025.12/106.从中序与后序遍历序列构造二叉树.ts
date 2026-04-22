@@ -55,6 +55,7 @@
  *
  *
  */
+// @ts-ignore
 class TreeNode {
   val: number;
   left: TreeNode | null;
@@ -66,6 +67,7 @@ class TreeNode {
   }
 }
 // @lc code=start
+// @ts-ignore
 function buildTree(inorder: number[], postorder: number[]): TreeNode | null {
   const inMap = new Map();
   const length = postorder.length;
