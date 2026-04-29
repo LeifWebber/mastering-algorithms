@@ -50,13 +50,12 @@
  *
  *
  */
-use std::cmp::max;
-use std::collections::HashMap;
 
 // @lcpr-template-start
 struct Solution;
 // @lcpr-template-end
 // @lc code=start
+use std::collections::HashMap;
 impl Solution {
     pub fn length_of_longest_substring(s: String) -> i32 {
         let iter = s.as_bytes();
@@ -65,14 +64,15 @@ impl Solution {
         let mut max: i32 = 0;
         let mut char_map = HashMap::<u8, usize>::new();
         for index in 0..iter.len() {
-            // map 里没有该字符
-            if char_map.get(&iter[fast]).is_none(){
-                char_map.insert(iter[fast], index);
-                fast += 1;
-                max = slow.max(fast - slow) as i32;
+            // map 里有该字符
+            if let Some(&last_index) = char_map.get(&iter[fast]) {
+                slow = slow.max(last_index + 1);
             }
+            max = max.max((fast - slow + 1) as i32);
+            char_map.insert(iter[index], index);
+            fast += 1;
         }
-        8i32
+        max
     }
 }
 // @lc code=end
@@ -92,3 +92,20 @@ impl Solution {
 
  */
 fn main() {}
+
+#[cfg(test)]
+mod tests {
+    use super::Solution;
+
+    #[test]
+    fn examples() {
+        assert_eq!(Solution::length_of_longest_substring("abcabcbb".to_string()), 3);
+        assert_eq!(Solution::length_of_longest_substring("bbbbb".to_string()), 1);
+        assert_eq!(Solution::length_of_longest_substring("pwwkew".to_string()), 3);
+    }
+
+    #[test]
+    fn repeated_char_before_window() {
+        assert_eq!(Solution::length_of_longest_substring("tmmzuxt".to_string()), 5);
+    }
+}
